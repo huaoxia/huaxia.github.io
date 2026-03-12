@@ -1,0 +1,687 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>二手交易平台演示</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+    <style>
+        .item-card {
+            transition: transform 0.3s;
+        }
+        .item-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+        .hero-section {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 60px 0;
+        }
+        .btn-primary {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border: none;
+        }
+        .btn-primary:hover {
+            background: linear-gradient(135deg, #5a6fd8 0%, #6a4298 100%);
+        }
+    </style>
+</head>
+<body>
+    <!-- 导航栏 -->
+    <nav class="navbar navbar-expand-lg navbar-light bg-white shadow-sm">
+        <div class="container">
+            <a class="navbar-brand" href="#">二手交易平台</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav me-auto">
+                    <li class="nav-item">
+                        <a class="nav-link active" href="#home">首页</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#items">浏览物品</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#add-item">发布物品</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#search">搜索</a>
+                    </li>
+                </ul>
+                <ul class="navbar-nav">
+                    <li class="nav-item">
+                        <button class="btn btn-outline-primary" id="login-btn">登录</button>
+                    </li>
+                    <li class="nav-item">
+                        <button class="btn btn-primary" id="register-btn">注册</button>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- 英雄区域 -->
+    <section id="home" class="hero-section">
+        <div class="container text-center">
+            <h1 class="display-4 mb-4">校园二手交易平台</h1>
+            <p class="lead mb-6">方便学生买卖、交换闲置物品，让资源得到充分利用</p>
+            <div class="row justify-content-center">
+                <div class="col-md-6">
+                    <div class="input-group mb-3">
+                        <select class="form-select" id="school-select">
+                            <option value="">选择您的学校</option>
+                            <option value="天津职业技术师范大学">天津职业技术师范大学</option>
+                            <option value="北京大学">北京大学</option>
+                            <option value="清华大学">清华大学</option>
+                            <option value="复旦大学">复旦大学</option>
+                            <option value="上海交通大学">上海交通大学</option>
+                            <option value="浙江大学">浙江大学</option>
+                            <option value="南京大学">南京大学</option>
+                            <option value="武汉大学">武汉大学</option>
+                            <option value="华中科技大学">华中科技大学</option>
+                        </select>
+                        <button class="btn btn-light" id="set-school-btn">确定</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 物品列表 -->
+    <section id="items" class="py-8">
+        <div class="container">
+            <h2 class="text-center mb-6">浏览物品</h2>
+            <div class="row" id="items-container">
+                <!-- 物品卡片将通过JavaScript动态生成 -->
+            </div>
+        </div>
+    </section>
+
+    <!-- 发布物品 -->
+    <section id="add-item" class="py-8 bg-light">
+        <div class="container">
+            <h2 class="text-center mb-6">发布物品</h2>
+            <div class="row justify-content-center">
+                <div class="col-md-8">
+                    <form id="add-item-form">
+                        <div class="mb-3">
+                            <label for="item-name" class="form-label">物品名称</label>
+                            <input type="text" class="form-control" id="item-name" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="item-description" class="form-label">物品描述</label>
+                            <textarea class="form-control" id="item-description" rows="4" required></textarea>
+                        </div>
+                        <div class="mb-3">
+                            <label for="item-price" class="form-label">价格（可选，留空表示可交换）</label>
+                            <input type="number" class="form-control" id="item-price" step="0.01" min="0">
+                        </div>
+                        <div class="mb-3">
+                            <label for="item-category" class="form-label">分类</label>
+                            <select class="form-select" id="item-category" required>
+                                <option value="">请选择</option>
+                                <option value="电子产品">电子产品</option>
+                                <option value="书籍">书籍</option>
+                                <option value="服装">服装</option>
+                                <option value="运动器材">运动器材</option>
+                                <option value="其他">其他</option>
+                            </select>
+                        </div>
+                        <div class="mb-3">
+                            <label for="item-image" class="form-label">图片URL（可选）</label>
+                            <input type="text" class="form-control" id="item-image">
+                        </div>
+                        <button type="submit" class="btn btn-primary w-100">发布</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 搜索功能 -->
+    <section id="search" class="py-8">
+        <div class="container">
+            <h2 class="text-center mb-6">搜索物品</h2>
+            <div class="row mb-6">
+                <div class="col-md-12">
+                    <form id="search-form" class="row">
+                        <div class="col-md-4">
+                            <div class="mb-3">
+                                <label for="search-query" class="form-label">关键词</label>
+                                <input type="text" class="form-control" id="search-query" placeholder="输入物品名称或描述">
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="mb-3">
+                                <label for="search-category" class="form-label">分类</label>
+                                <select class="form-select" id="search-category">
+                                    <option value="">全部分类</option>
+                                    <option value="电子产品">电子产品</option>
+                                    <option value="书籍">书籍</option>
+                                    <option value="服装">服装</option>
+                                    <option value="运动器材">运动器材</option>
+                                    <option value="其他">其他</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-md-2">
+                            <div class="mb-3">
+                                <label for="search-min-price" class="form-label">最低价格</label>
+                                <input type="number" class="form-control" id="search-min-price" step="0.01" min="0">
+                            </div>
+                        </div>
+                        <div class="col-md-2">
+                            <div class="mb-3">
+                                <label for="search-max-price" class="form-label">最高价格</label>
+                                <input type="number" class="form-control" id="search-max-price" step="0.01" min="0">
+                            </div>
+                        </div>
+                        <div class="col-md-1" style="align-self: flex-end;">
+                            <button type="submit" class="btn btn-primary w-100">搜索</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+            <div class="row" id="search-results">
+                <!-- 搜索结果将通过JavaScript动态生成 -->
+            </div>
+        </div>
+    </section>
+
+    <!-- 物品详情模态框 -->
+    <div class="modal fade" id="item-modal" tabindex="-1" aria-labelledby="item-modal-label" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="item-modal-label">物品详情</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="row" id="item-detail">
+                        <!-- 物品详情将通过JavaScript动态生成 -->
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">关闭</button>
+                    <button type="button" class="btn btn-primary" id="buy-btn">购买</button>
+                    <button type="button" class="btn btn-success" id="exchange-btn">交换</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 登录模态框 -->
+    <div class="modal fade" id="login-modal" tabindex="-1" aria-labelledby="login-modal-label" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="login-modal-label">登录</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="login-form">
+                        <div class="mb-3">
+                            <label for="login-email" class="form-label">邮箱</label>
+                            <input type="email" class="form-control" id="login-email" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="login-password" class="form-label">密码</label>
+                            <input type="password" class="form-control" id="login-password" required>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">取消</button>
+                    <button type="button" class="btn btn-primary" id="submit-login">登录</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 注册模态框 -->
+    <div class="modal fade" id="register-modal" tabindex="-1" aria-labelledby="register-modal-label" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="register-modal-label">注册</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="register-form">
+                        <div class="mb-3">
+                            <label for="register-username" class="form-label">用户名</label>
+                            <input type="text" class="form-control" id="register-username" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="register-email" class="form-label">邮箱</label>
+                            <input type="email" class="form-control" id="register-email" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="register-password" class="form-label">密码</label>
+                            <input type="password" class="form-control" id="register-password" required>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">取消</button>
+                    <button type="button" class="btn btn-primary" id="submit-register">注册</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        // 模拟数据
+        let items = [
+            {
+                id: 1,
+                name: "机械键盘",
+                description: "青轴，手感极佳，使用半年",
+                price: 200,
+                category: "电子产品",
+                image: "https://trae-api-cn.mchost.guru/api/ide/v1/text_to_image?prompt=mechanical%20keyboard&image_size=square_hd",
+                school: "天津职业技术师范大学",
+                owner: "陈九",
+                status: "available"
+            },
+            {
+                id: 2,
+                name: "高等数学教材",
+                description: "同济第七版，有少量笔记",
+                price: 30,
+                category: "书籍",
+                image: "https://trae-api-cn.mchost.guru/api/ide/v1/text_to_image?prompt=mathematics%20textbook&image_size=square_hd",
+                school: "天津职业技术师范大学",
+                owner: "吴十",
+                status: "available"
+            },
+            {
+                id: 3,
+                name: "羽毛球拍",
+                description: "尤尼克斯，9成新",
+                price: 150,
+                category: "运动器材",
+                image: "https://trae-api-cn.mchost.guru/api/ide/v1/text_to_image?prompt=badminton%20racket&image_size=square_hd",
+                school: "天津职业技术师范大学",
+                owner: "郑十一",
+                 status: "available"
+            },
+            {
+                id: 7,
+                name: "iPhone 13",
+                description: "9成新，无划痕，配件齐全",
+                price: 4500,
+                category: "电子产品",
+                image: "https://trae-api-cn.mchost.guru/api/ide/v1/text_to_image?prompt=iPhone%2013%20smartphone&image_size=square_hd",
+                school: "北京大学",
+                owner: "张三",
+                status: "available"
+            },
+            {
+                id: 8,
+                name: "Python编程书籍",
+                description: "全新，未开封",
+                price: 50,
+                category: "书籍",
+                image: "https://trae-api-cn.mchost.guru/api/ide/v1/text_to_image?prompt=Python%20programming%20book&image_size=square_hd",
+                school: "北京大学",
+                owner: "李四",
+                status: "available"
+            },
+            {
+                id: 9,
+                name: "篮球",
+                description: "几乎全新，只打过几次",
+                price: 80,
+                category: "运动器材",
+                image: "https://trae-api-cn.mchost.guru/api/ide/v1/text_to_image?prompt=basketball%20sports%20equipment&image_size=square_hd",
+                school: "北京大学",
+                owner: "王五",
+                status: "available"
+            },
+            {
+                id: 4,
+                name: "笔记本电脑",
+                description: "2023年购买，配置良好",
+                price: 3000,
+                category: "电子产品",
+                image: "https://trae-api-cn.mchost.guru/api/ide/v1/text_to_image?prompt=laptop%20computer&image_size=square_hd",
+                school: "清华大学",
+                owner: "赵六",
+                status: "available"
+            },
+            {
+                id: 5,
+                name: "英语四级词汇书",
+                description: "有少量笔记",
+                price: 20,
+                category: "书籍",
+                image: "https://trae-api-cn.mchost.guru/api/ide/v1/text_to_image?prompt=English%20vocabulary%20book&image_size=square_hd",
+                school: "清华大学",
+                owner: "孙七",
+                status: "available"
+            },
+            {
+                id: 6,
+                name: "运动外套",
+                description: "L码，适合春秋季节",
+                price: 100,
+                category: "服装",
+                image: "https://trae-api-cn.mchost.guru/api/ide/v1/text_to_image?prompt=sports%20jacket&image_size=square_hd",
+                school: "清华大学",
+                owner: "周八",
+                status: "available"
+            }
+        ];
+
+        let currentSchool = "";
+        let currentUser = null;
+
+        // DOM加载完成后执行
+        document.addEventListener('DOMContentLoaded', function() {
+            // 绑定事件
+            document.getElementById('set-school-btn').addEventListener('click', setSchool);
+            document.getElementById('add-item-form').addEventListener('submit', addItem);
+            document.getElementById('search-form').addEventListener('submit', searchItems);
+            document.getElementById('login-btn').addEventListener('click', function() {
+                new bootstrap.Modal(document.getElementById('login-modal')).show();
+            });
+            document.getElementById('register-btn').addEventListener('click', function() {
+                new bootstrap.Modal(document.getElementById('register-modal')).show();
+            });
+            document.getElementById('submit-login').addEventListener('click', login);
+            document.getElementById('submit-register').addEventListener('click', register);
+            document.getElementById('buy-btn').addEventListener('click', buyItem);
+            document.getElementById('exchange-btn').addEventListener('click', exchangeItem);
+
+            // 初始加载物品
+            renderItems();
+        });
+
+        // 设置学校
+        function setSchool() {
+            const schoolSelect = document.getElementById('school-select');
+            currentSchool = schoolSelect.value;
+            if (currentSchool) {
+                alert(`已选择学校：${currentSchool}`);
+                renderItems();
+            } else {
+                alert('请选择学校');
+            }
+        }
+
+        // 渲染物品列表
+        function renderItems(itemsToRender = items) {
+            const container = document.getElementById('items-container');
+            container.innerHTML = '';
+
+            let filteredItems = itemsToRender;
+            if (currentSchool) {
+                filteredItems = itemsToRender.filter(item => item.school === currentSchool);
+            }
+
+            if (filteredItems.length === 0) {
+                container.innerHTML = '<div class="col-12 text-center"><p class="text-muted">没有找到物品</p></div>';
+                return;
+            }
+
+            filteredItems.forEach(item => {
+                if (item.status === 'available') {
+                    const card = document.createElement('div');
+                    card.className = 'col-md-4 mb-4';
+                    card.innerHTML = `
+                        <div class="card item-card">
+                            <img src="${item.image || 'https://via.placeholder.com/300x200?text=无图片'}" class="card-img-top" alt="${item.name}" style="height: 200px; object-fit: cover;">
+                            <div class="card-body">
+                                <h5 class="card-title">${item.name}</h5>
+                                <p class="card-text">${item.description.substring(0, 100)}...</p>
+                                <p class="card-text ${item.price ? 'text-danger' : 'text-info'}">${item.price ? `¥${item.price}` : '可交换'}</p>
+                                <p class="card-text text-muted">${item.school}</p>
+                                <button class="btn btn-primary view-item" data-id="${item.id}">查看详情</button>
+                            </div>
+                        </div>
+                    `;
+                    container.appendChild(card);
+                }
+            });
+
+            // 绑定查看详情事件
+            document.querySelectorAll('.view-item').forEach(btn => {
+                btn.addEventListener('click', function() {
+                    const itemId = parseInt(this.getAttribute('data-id'));
+                    showItemDetail(itemId);
+                });
+            });
+        }
+
+        // 显示物品详情
+        function showItemDetail(itemId) {
+            const item = items.find(item => item.id === itemId);
+            if (!item) return;
+
+            const detailContainer = document.getElementById('item-detail');
+            detailContainer.innerHTML = `
+                <div class="col-md-6">
+                    <img src="${item.image || 'https://via.placeholder.com/400x300?text=无图片'}" class="img-fluid" alt="${item.name}">
+                </div>
+                <div class="col-md-6">
+                    <h2>${item.name}</h2>
+                    <p class="text-muted">发布者: ${item.owner}</p>
+                    <p class="text-muted">学校: ${item.school}</p>
+                    <p class="text-muted">分类: ${item.category}</p>
+                    <h3 class="${item.price ? 'text-danger' : 'text-info'}">${item.price ? `¥${item.price}` : '可交换'}</h3>
+                    <p class="mt-4">${item.description}</p>
+                </div>
+            `;
+
+            // 保存当前查看的物品ID
+            document.getElementById('buy-btn').setAttribute('data-id', itemId);
+            document.getElementById('exchange-btn').setAttribute('data-id', itemId);
+
+            // 显示模态框
+            new bootstrap.Modal(document.getElementById('item-modal')).show();
+        }
+
+        // 购买物品
+        function buyItem() {
+            const itemId = parseInt(this.getAttribute('data-id'));
+            const item = items.find(item => item.id === itemId);
+            if (item) {
+                item.status = 'sold';
+                alert('购买成功！');
+                renderItems();
+                bootstrap.Modal.getInstance(document.getElementById('item-modal')).hide();
+            }
+        }
+
+        // 交换物品
+        function exchangeItem() {
+            const itemId = parseInt(this.getAttribute('data-id'));
+            const item = items.find(item => item.id === itemId);
+            if (item) {
+                item.status = 'exchanged';
+                alert('交换成功！');
+                renderItems();
+                bootstrap.Modal.getInstance(document.getElementById('item-modal')).hide();
+            }
+        }
+
+        // 发布物品
+        function addItem(e) {
+            e.preventDefault();
+            
+            if (!currentSchool) {
+                alert('请先选择学校');
+                return;
+            }
+
+            const name = document.getElementById('item-name').value;
+            const description = document.getElementById('item-description').value;
+            const price = document.getElementById('item-price').value;
+            const category = document.getElementById('item-category').value;
+            const image = document.getElementById('item-image').value;
+
+            const newItem = {
+                id: items.length + 1,
+                name: name,
+                description: description,
+                price: price ? parseFloat(price) : null,
+                category: category,
+                image: image || 'https://via.placeholder.com/300x200?text=无图片',
+                school: currentSchool,
+                owner: currentUser ? currentUser : '匿名用户',
+                status: 'available'
+            };
+
+            items.push(newItem);
+            alert('物品发布成功！');
+            document.getElementById('add-item-form').reset();
+            renderItems();
+        }
+
+        // 搜索物品
+        function searchItems(e) {
+            e.preventDefault();
+
+            const query = document.getElementById('search-query').value.toLowerCase();
+            const category = document.getElementById('search-category').value;
+            const minPrice = document.getElementById('search-min-price').value;
+            const maxPrice = document.getElementById('search-max-price').value;
+
+            let filteredItems = items;
+
+            // 按学校筛选
+            if (currentSchool) {
+                filteredItems = filteredItems.filter(item => item.school === currentSchool);
+            }
+
+            // 按关键词筛选
+            if (query) {
+                filteredItems = filteredItems.filter(item => 
+                    item.name.toLowerCase().includes(query) || 
+                    item.description.toLowerCase().includes(query)
+                );
+            }
+
+            // 按分类筛选
+            if (category) {
+                filteredItems = filteredItems.filter(item => item.category === category);
+            }
+
+            // 按价格范围筛选
+            if (minPrice) {
+                filteredItems = filteredItems.filter(item => item.price >= parseFloat(minPrice));
+            }
+            if (maxPrice) {
+                filteredItems = filteredItems.filter(item => item.price <= parseFloat(maxPrice));
+            }
+
+            // 显示搜索结果
+            const resultsContainer = document.getElementById('search-results');
+            resultsContainer.innerHTML = '';
+
+            if (filteredItems.length === 0) {
+                resultsContainer.innerHTML = '<div class="col-12 text-center"><p class="text-muted">没有找到匹配的物品</p></div>';
+                return;
+            }
+
+            filteredItems.forEach(item => {
+                if (item.status === 'available') {
+                    const card = document.createElement('div');
+                    card.className = 'col-md-4 mb-4';
+                    card.innerHTML = `
+                        <div class="card item-card">
+                            <img src="${item.image || 'https://via.placeholder.com/300x200?text=无图片'}" class="card-img-top" alt="${item.name}" style="height: 200px; object-fit: cover;">
+                            <div class="card-body">
+                                <h5 class="card-title">${item.name}</h5>
+                                <p class="card-text">${item.description.substring(0, 100)}...</p>
+                                <p class="card-text ${item.price ? 'text-danger' : 'text-info'}">${item.price ? `¥${item.price}` : '可交换'}</p>
+                                <p class="card-text text-muted">${item.school}</p>
+                                <button class="btn btn-primary view-item" data-id="${item.id}">查看详情</button>
+                            </div>
+                        </div>
+                    `;
+                    resultsContainer.appendChild(card);
+                }
+            });
+
+            // 绑定查看详情事件
+            document.querySelectorAll('#search-results .view-item').forEach(btn => {
+                btn.addEventListener('click', function() {
+                    const itemId = parseInt(this.getAttribute('data-id'));
+                    showItemDetail(itemId);
+                });
+            });
+        }
+
+        // 登录
+        function login() {
+            const email = document.getElementById('login-email').value;
+            const password = document.getElementById('login-password').value;
+            
+            // 模拟登录
+            currentUser = email;
+            alert('登录成功！');
+            document.getElementById('login-form').reset();
+            bootstrap.Modal.getInstance(document.getElementById('login-modal')).hide();
+            
+            // 更新导航栏
+            updateNavbar();
+        }
+
+        // 注册
+        function register() {
+            const username = document.getElementById('register-username').value;
+            const email = document.getElementById('register-email').value;
+            const password = document.getElementById('register-password').value;
+            
+            // 模拟注册
+            currentUser = email;
+            alert('注册成功！');
+            document.getElementById('register-form').reset();
+            bootstrap.Modal.getInstance(document.getElementById('register-modal')).hide();
+            
+            // 更新导航栏
+            updateNavbar();
+        }
+
+        // 更新导航栏
+        function updateNavbar() {
+            const navRight = document.querySelector('.navbar-nav.ms-auto + .navbar-nav');
+            if (currentUser) {
+                navRight.innerHTML = `
+                    <li class="nav-item">
+                        <span class="nav-link">欢迎，${currentUser}</span>
+                    </li>
+                    <li class="nav-item">
+                        <button class="btn btn-outline-primary" id="logout-btn">退出登录</button>
+                    </li>
+                `;
+                document.getElementById('logout-btn').addEventListener('click', function() {
+                    currentUser = null;
+                    alert('已退出登录');
+                    updateNavbar();
+                });
+            } else {
+                navRight.innerHTML = `
+                    <li class="nav-item">
+                        <button class="btn btn-outline-primary" id="login-btn">登录</button>
+                    </li>
+                    <li class="nav-item">
+                        <button class="btn btn-primary" id="register-btn">注册</button>
+                    </li>
+                `;
+                document.getElementById('login-btn').addEventListener('click', function() {
+                    new bootstrap.Modal(document.getElementById('login-modal')).show();
+                });
+                document.getElementById('register-btn').addEventListener('click', function() {
+                    new bootstrap.Modal(document.getElementById('register-modal')).show();
+                });
+            }
+        }
+    </script>
+</body>
+</html>
